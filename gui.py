@@ -16,13 +16,13 @@ label.pack(pady=20) # Add some padding for better appearance
 conv_name_var = tk.StringVar()
 num_of_conv_var = tk.StringVar()
 
-conv_name__frame = tk.Frame(root)
-conv_name__frame.pack(pady=10)
+conv_name_frame = tk.Frame(root)
+conv_name_frame.pack(pady=10)
 
-conv_name_label = tk.Label(conv_name__frame, text="Conveyor Name:")
+conv_name_label = tk.Label(conv_name_frame, text="Conveyor Name:")
 conv_name_label.pack(side="left", padx=5)
 
-conv_name_entry = tk.Entry(conv_name__frame, width=30, textvariable=conv_name_var)
+conv_name_entry = tk.Entry(conv_name_frame, width=30, textvariable=conv_name_var)
 conv_name_entry.pack(side="left", padx=5)
 
 num_of_conv_frame = tk.Frame(root)
@@ -40,7 +40,7 @@ def save_input():
     print(f"User input: {conv_name}")
     print(f"Number of conveyors: {num_of_conv}")
 
-save_button = tk.Button(root, text="Generate", command=save_input)
+save_button = tk.Button(root, text="Generate Code", command=save_input)
 save_button.pack(pady=10)
 
 # Start the main event loop
