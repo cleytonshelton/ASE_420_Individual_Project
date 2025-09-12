@@ -40,7 +40,7 @@ def save_input():
     print(f"User input: {conv_name}")
     print(f"Number of conveyors: {num_of_conv}")
 
-save_button = tk.Button(root, text="Generate", command=save_input)
+save_button = tk.Button(root, text="Generate Code", command=save_input)
 save_button.pack(pady=10)
 
 # Start the main event loop
