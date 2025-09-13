@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-
+from tkinter import messagebox
 
 # Create the main window
 root = tk.Tk()
@@ -54,10 +54,32 @@ def save_input():
     conv_name = conv_name_var.get()
     num_of_conv = num_of_conv_var.get()
     is_MU = is_MU_var.get()
+    filepath = filepath_var.get()
+
+    if not conv_name or not num_of_conv or not filepath:
+        messagebox.showerror("Missing Information", "Please fill in all the text fields.")
+        return
+
+    try:
+        i = 1
+        with open(filepath, 'w') as file:
+            while i < int(num_of_conv):
+                file.write(f"F_{conv_name}_{i}_PE_JAM")
+                i += 1
+    except Exception as e:
+        messagebox.showerror("File Error", f"An error occurred while writing to the file: {e}")
+        return
+            
     print(f"User input: {conv_name}")
     print(f"Number of conveyors: {num_of_conv}")
     print(f"Does this have a MU? {is_MU}")
+    print(f"Filepath: {filepath}")
 
+    conv_name_var.set("")
+    num_of_conv_var.set("")
+    is_MU_var.set(False)
+    filepath_var.set("")
+    
 save_button = tk.Button(root, text="Generate Code", command=save_input)
 save_button.grid(row=5, column=0, columnspan=3, pady=20)
 
