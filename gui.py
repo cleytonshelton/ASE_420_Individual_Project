@@ -63,8 +63,8 @@ def save_input():
     try:
         i = 1
         with open(filepath, 'w') as file:
-            while i < int(num_of_conv):
-                file.write(f"F_{conv_name}_{i}_PE_JAM")
+            while i <= int(num_of_conv):
+                file.write(f"[XIO(I_{conv_name}_{i}_PE_HEAD_END)[XIC({conv_name}_{i}_VFD:I.Data[0].4),XIC(E3D_READ[0].{i-1})][TON(PE_JAM_TMR[{i-1}],?,?),XIC(PE_JAM_TMR[{i-1}].DN)OTL(F_{conv_name}_{i}_PE_JAM)],XIC(I_{conv_name}_{i}_PE_HEAD_END)XIC(F_{conv_name}_{i}_PE_JAM)XIC(F_CS_{conv_name}_{i}_EPB)XIO(I_CS_{conv_name}_{i}_EPB)XIC(I_CS_{conv_name}_{i}_SPB)OTU(F_{conv_name}_{i}_PE_JAM)];")
                 i += 1
     except Exception as e:
         messagebox.showerror("File Error", f"An error occurred while writing to the file: {e}")
