@@ -1,3 +1,4 @@
+import string
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
@@ -71,24 +72,48 @@ def save_input():
             file.write("**** PE JAM FAULTS **** \n")
             for i in range(1, num + 1):
                file.write(f"[XIO(I_{conv_name}_{i:02}_PE_HEAD_END)[XIC({conv_name}_{i:02}_VFD:I.Data[0].4),XIC(E3D_READ[0].{i-1})][TON(PE_JAM_TMR[{i-1}],?,?),XIC(PE_JAM_TMR[{i-1}].DN)OTL(F_{conv_name}_{i:02}_PE_JAM)],XIC(I_{conv_name}_{i:02}_PE_HEAD_END)XIC(F_{conv_name}_{i:02}_PE_JAM)XIC(F_CS_{conv_name}_{i:02}_EPB)XIO(I_CS_{conv_name}_{i:02}_EPB)XIC(I_CS_{conv_name}_{i:02}_SPB)OTU(F_{conv_name}_{i:02}_PE_JAM)];")
-
+            
             # MOTOR FAULTS
             file.write("\n**** MOTOR FAULTS **** \n")
             # MISC_REGS index starting point (placeholder change for each project)
             j = 30
             for i in range(1, num + 1):
                 file.write(f"[[XIC({conv_name}_{i:02}_VFD:O.Data[0].7)XIO({conv_name}_{i:02}_VFD:I.Data[0].4),XIO({conv_name}_{i:02}_VFD:O.Data[0].7)XIC({conv_name}_{i:02}_VFD:I.Data[0].4)]TON({conv_name}_{i:02}_VFD_FAULTED_FAULT_TMR,?,?),XIC(I_MCP_DC01_EZONE1_ESCR)[XIC({conv_name}_{i:02}_VFD_FAULTED_FAULT_TMR.DN),XIO(F_{conv_name}_{i:02}_VFD_COMM_FLT)XIC({conv_name}_{i:02}_VFD:I.Data[0].8)ONS(MISC_REGS[{j}].0)]OTL(F_{conv_name}_{i:02}_VFD_FLT)];")
-                j = j + 1
+                j += 1
+            
+            last_MISC_REGS = j
+
+            if is_MU:
+                for i in range(1, 3):
+                    file.write(f"[[XIC({conv_name}_M{i}_VFD:O.Data[0].7)XIO({conv_name}_M{i}_VFD:I.Data[0].4),XIO({conv_name}_M{i}_VFD:O.Data[0].7)XIC({conv_name}_M{i}_VFD:I.Data[0].4)]TON({conv_name}_M{i}_VFD_FAULTED_FAULT_TMR,?,?),XIC(I_MCP_{conv_name}_EZONE3_ESCR)[XIC({conv_name}_M{i}_VFD_FAULTED_FAULT_TMR.DN),XIO(F_{conv_name}_M{i}_VFD_COMM_FLT)XIC({conv_name}_M{i}_VFD:I.Data[0].8)ONS(MISC_REGS[{last_MISC_REGS}].0)]OTL(F_{conv_name}_M{i}_VFD_FLT)];")
+                    last_MISC_REGS += 1
 
             # COMM FAULTS
             file.write("\n**** COMM FAULTS **** \n")
             for i in range(1, num + 1):
                 file.write(f"XIC({conv_name}_{i:02}_VFD:I.ConnectionFaulted)OTE(F_{conv_name}_{i:02}_VFD_COMM_FLT);")
             
+            if is_MU:
+                for i in range(1, 3):
+                    file.write(f"XIC({conv_name}_M{i}_VFD:I.ConnectionFaulted)OTE(F_{conv_name}_M{i}_VFD_COMM_FLT);")
+
             # DISC FAULTS
-            file.write("\n**** DISC FAULTS ****")
+            file.write("\n**** DISC FAULTS **** \n")
             for i in range(1, num + 1):
                 file.write(f"XIO(I_{conv_name}_{i:02}_MSD)OTE(F_{conv_name}_{i:02}_MSD);")
+
+            if is_MU:
+                for i in range(1, 3):
+                    file.write(f"XIO(I_{conv_name}_M{i}_MSD)OTE(F_{conv_name}_M{i}_MSD);")
+
+            # ESTOP FAULTS
+            file.write("\n**** ESTOP FAULTS **** \n")
+            for i in range(1, num + 1):
+                file.write(f"[XIC(I_CS_{conv_name}_{i:02}_EPB)OTL(F_CS_{conv_name}_{i:02}_EPB),XIO(I_CS_{conv_name}_{i:02}_EPB)XIC(I_CS_{conv_name}_{i:02}_SPB)OTU(F_CS_{conv_name}_{i:02}_EPB)];")
+
+            for letter in string.ascii_uppercase[:7]:
+                file.write(f"[XIC(I_CS_{conv_name}{letter}_EPB)OTL(F_CS_{conv_name}{letter}_EPB),XIO(I_CS_{conv_name}{letter}_EPB)XIC(I_CS_{conv_name}{letter}_KSW)OTU(F_CS_{conv_name}{letter}_EPB)];")
+   
     except Exception as e:
         messagebox.showerror("File Error", f"An error occurred while writing to the file: {e}")
         return
