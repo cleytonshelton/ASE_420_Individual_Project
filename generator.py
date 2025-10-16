@@ -16,7 +16,7 @@ class Section:
 
 class PeJamSection(Section):
     def render(self, ctx: Context) -> str:
-        lines: List[str] = ["**** PE JAM FAULTS **** "]
+        lines: List[str] = ["**** PE JAM FAULTS **** \n"]
         for i in range(1, ctx.num_conveyors + 1):
             idx = i - 1
             lines.append(
