@@ -7,7 +7,7 @@ from tkinter import messagebox
 
 root = tk.Tk()
 root.title("PLC Code Generator")
-root.geometry("520x380")
+root.geometry("480x360")
 root.resizable(False, False)
 
 # Theming
@@ -32,7 +32,7 @@ title_label = ttk.Label(main, text="PLC Code Generator", font=("Segoe UI", 12, "
 title_label.grid(row=0, column=0, pady=(0, 12), sticky="w")
 
 # Form frame
-form = ttk.LabelFrame(main, text="Inputs", padding=(12, 8, 12, 8))
+form = ttk.LabelFrame(main, text="Inputs", padding=(12, 10, 12, 10))
 form.grid(row=1, column=0, sticky="nsew")
 form.columnconfigure(0, weight=0)
 form.columnconfigure(1, weight=1)
