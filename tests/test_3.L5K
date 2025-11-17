@@ -1,0 +1,421 @@
+(*********************************************
+
+    Import-Export
+    Version   := RSLogix 5000 v32.01
+    Owner     := admin, 
+    Exported  := Sun Nov 16 19:55:31 2025
+
+    Note:  File encoded in UTF-8.  Only edit file in a program 
+            which supports UTF-8 (like Notepad, not Wordpad).
+
+    **********************************************)
+    IE_VER := 2.23;
+
+    CONTROLLER HOU_DC6 (ProcessorType := "1756-L81E",
+                        Major := 32,
+                        RedundancyEnabled := 0,
+                        KeepTestEditsOnSwitchOver := 0,
+                        SecurityCode := 0,
+                        ChangesToDetect := 16#ffff_ffff_ffff_ffff,
+                        SFCExecutionControl := "CurrentActive",
+                        SFCRestartPosition := "MostRecent",
+                        SFCLastScan := "DontScan",
+                        SerialNumber := 16#0000_0000,
+                        MatchProjectToController := No,
+                        CanUseRPIFromProducer := No,
+                        InhibitAutomaticFirmwareUpdate := 0,
+                        PassThroughConfiguration := EnabledWithAppend,
+                        DownloadProjectDocumentationAndExtendedProperties := Yes,
+                        ReportMinorOverflow := 0)
+        MODULE Local (Parent := "Local",
+                    ParentModPortId := 1,
+                    CatalogNumber := "1756-L81E",
+                    Vendor := 1,
+                    ProductType := 14,
+                    ProductCode := 164,
+                    Major := 32,
+                    Minor := 11,
+                    PortLabel := "RxBACKPLANE",
+                    ChassisSize := 10,
+                    Slot := 0,
+                    Mode := 2#0000_0000_0000_0001,
+                    CompatibleModule := 0,
+                    KeyMask := 2#0000_0000_0000_0000)
+        END_MODULE
+
+        MODULE R01S01_EN2T (Parent := "Local",
+                            ParentModPortId := 2,
+                            CatalogNumber := "1756-EN2T",
+                            Vendor := 1,
+                            ProductType := 12,
+                            ProductCode := 166,
+                            Major := 12,
+                            Minor := 1,
+                            PortLabel := "ENet",
+                            ChassisSize := 17,
+                            Slot := 0,
+                            NodeAddress := "192.168.1.12",
+                            CommMethod := 805306369,
+                            Mode := 2#0000_0000_0000_0000,
+                            CompatibleModule := 1,
+                            KeyMask := 2#0000_0000_0001_1111)
+            ExtendedProp := [[[___<public><Vendor>Rockwell Automation/Allen-Bradley</Vendor><CatNum>1756-EN2T</CatNum><ConfigID>4456551</ConfigID></public>___]]]
+            CONNECTION Output (Rate := 10000,
+                            EventID := 0,
+                            Unicast := Yes)
+                InputData  := [0,[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]];
+                OutputData  := [0,[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]];
+            END_CONNECTION
+        END_MODULE
+        
+	TAG
+		PE_JAM_TMR : TIMER[13];
+		F_DC06_01_PE_JAM : BOOL;
+		I_DC06_01_PE_HEAD_END : BOOL;
+		F_DC06_02_PE_JAM : BOOL;
+		I_DC06_02_PE_HEAD_END : BOOL;
+		F_DC06_03_PE_JAM : BOOL;
+		I_DC06_03_PE_HEAD_END : BOOL;
+		F_DC06_04_PE_JAM : BOOL;
+		I_DC06_04_PE_HEAD_END : BOOL;
+		F_DC06_05_PE_JAM : BOOL;
+		I_DC06_05_PE_HEAD_END : BOOL;
+		F_DC06_06_PE_JAM : BOOL;
+		I_DC06_06_PE_HEAD_END : BOOL;
+		F_DC06_07_PE_JAM : BOOL;
+		I_DC06_07_PE_HEAD_END : BOOL;
+		F_DC06_08_PE_JAM : BOOL;
+		I_DC06_08_PE_HEAD_END : BOOL;
+		F_DC06_09_PE_JAM : BOOL;
+		I_DC06_09_PE_HEAD_END : BOOL;
+		F_DC06_10_PE_JAM : BOOL;
+		I_DC06_10_PE_HEAD_END : BOOL;
+		F_DC06_11_PE_JAM : BOOL;
+		I_DC06_11_PE_HEAD_END : BOOL;
+		F_DC06_12_PE_JAM : BOOL;
+		I_DC06_12_PE_HEAD_END : BOOL;
+		F_DC06_13_PE_JAM : BOOL;
+		I_DC06_13_PE_HEAD_END : BOOL;
+		MISC_REGS : DINT[128];
+		F_DC06_01_VFD_FLT : BOOL;
+		F_DC06_01_VFD_COMM_FLT : BOOL;
+		DC06_01_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_02_VFD_FLT : BOOL;
+		F_DC06_02_VFD_COMM_FLT : BOOL;
+		DC06_02_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_03_VFD_FLT : BOOL;
+		F_DC06_03_VFD_COMM_FLT : BOOL;
+		DC06_03_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_04_VFD_FLT : BOOL;
+		F_DC06_04_VFD_COMM_FLT : BOOL;
+		DC06_04_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_05_VFD_FLT : BOOL;
+		F_DC06_05_VFD_COMM_FLT : BOOL;
+		DC06_05_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_06_VFD_FLT : BOOL;
+		F_DC06_06_VFD_COMM_FLT : BOOL;
+		DC06_06_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_07_VFD_FLT : BOOL;
+		F_DC06_07_VFD_COMM_FLT : BOOL;
+		DC06_07_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_08_VFD_FLT : BOOL;
+		F_DC06_08_VFD_COMM_FLT : BOOL;
+		DC06_08_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_09_VFD_FLT : BOOL;
+		F_DC06_09_VFD_COMM_FLT : BOOL;
+		DC06_09_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_10_VFD_FLT : BOOL;
+		F_DC06_10_VFD_COMM_FLT : BOOL;
+		DC06_10_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_11_VFD_FLT : BOOL;
+		F_DC06_11_VFD_COMM_FLT : BOOL;
+		DC06_11_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_12_VFD_FLT : BOOL;
+		F_DC06_12_VFD_COMM_FLT : BOOL;
+		DC06_12_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_13_VFD_FLT : BOOL;
+		F_DC06_13_VFD_COMM_FLT : BOOL;
+		DC06_13_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_M1_VFD_FLT : BOOL;
+		F_DC06_M1_VFD_COMM_FLT : BOOL;
+		DC06_M1_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_M2_VFD_FLT : BOOL;
+		F_DC06_M2_VFD_COMM_FLT : BOOL;
+		DC06_M2_VFD_FAULTED_FAULT_TMR : TIMER;
+		F_DC06_01_MSD : BOOL;
+		I_DC06_01_MSD : BOOL;
+		F_DC06_02_MSD : BOOL;
+		I_DC06_02_MSD : BOOL;
+		F_DC06_03_MSD : BOOL;
+		I_DC06_03_MSD : BOOL;
+		F_DC06_04_MSD : BOOL;
+		I_DC06_04_MSD : BOOL;
+		F_DC06_05_MSD : BOOL;
+		I_DC06_05_MSD : BOOL;
+		F_DC06_06_MSD : BOOL;
+		I_DC06_06_MSD : BOOL;
+		F_DC06_07_MSD : BOOL;
+		I_DC06_07_MSD : BOOL;
+		F_DC06_08_MSD : BOOL;
+		I_DC06_08_MSD : BOOL;
+		F_DC06_09_MSD : BOOL;
+		I_DC06_09_MSD : BOOL;
+		F_DC06_10_MSD : BOOL;
+		I_DC06_10_MSD : BOOL;
+		F_DC06_11_MSD : BOOL;
+		I_DC06_11_MSD : BOOL;
+		F_DC06_12_MSD : BOOL;
+		I_DC06_12_MSD : BOOL;
+		F_DC06_13_MSD : BOOL;
+		I_DC06_13_MSD : BOOL;
+		F_DC06_M1_MSD : BOOL;
+		I_DC06_M1_MSD : BOOL;
+		F_DC06_M2_MSD : BOOL;
+		I_DC06_M2_MSD : BOOL;
+		I_MCP_DC06_EPB : BOOL;
+		F_MCP_DC06_EPB : BOOL;
+		I_MCP_DC06_SPB : BOOL;
+		F_CS_DC06_01_EPB : BOOL;
+		I_CS_DC06_01_EPB : BOOL;
+		I_CS_DC06_01_SPB : BOOL;
+		F_CS_DC06_02_EPB : BOOL;
+		I_CS_DC06_02_EPB : BOOL;
+		I_CS_DC06_02_SPB : BOOL;
+		F_CS_DC06_03_EPB : BOOL;
+		I_CS_DC06_03_EPB : BOOL;
+		I_CS_DC06_03_SPB : BOOL;
+		F_CS_DC06_04_EPB : BOOL;
+		I_CS_DC06_04_EPB : BOOL;
+		I_CS_DC06_04_SPB : BOOL;
+		F_CS_DC06_05_EPB : BOOL;
+		I_CS_DC06_05_EPB : BOOL;
+		I_CS_DC06_05_SPB : BOOL;
+		F_CS_DC06_06_EPB : BOOL;
+		I_CS_DC06_06_EPB : BOOL;
+		I_CS_DC06_06_SPB : BOOL;
+		F_CS_DC06_07_EPB : BOOL;
+		I_CS_DC06_07_EPB : BOOL;
+		I_CS_DC06_07_SPB : BOOL;
+		F_CS_DC06_08_EPB : BOOL;
+		I_CS_DC06_08_EPB : BOOL;
+		I_CS_DC06_08_SPB : BOOL;
+		F_CS_DC06_09_EPB : BOOL;
+		I_CS_DC06_09_EPB : BOOL;
+		I_CS_DC06_09_SPB : BOOL;
+		F_CS_DC06_10_EPB : BOOL;
+		I_CS_DC06_10_EPB : BOOL;
+		I_CS_DC06_10_SPB : BOOL;
+		F_CS_DC06_11_EPB : BOOL;
+		I_CS_DC06_11_EPB : BOOL;
+		I_CS_DC06_11_SPB : BOOL;
+		F_CS_DC06_12_EPB : BOOL;
+		I_CS_DC06_12_EPB : BOOL;
+		I_CS_DC06_12_SPB : BOOL;
+		F_CS_DC06_13_EPB : BOOL;
+		I_CS_DC06_13_EPB : BOOL;
+		I_CS_DC06_13_SPB : BOOL;
+		F_CS_DC06A_EPB : BOOL;
+		I_CS_DC06A_EPB : BOOL;
+		I_CS_DC06A_SPB : BOOL;
+		F_CS_DC06B_EPB : BOOL;
+		I_CS_DC06B_EPB : BOOL;
+		I_CS_DC06B_SPB : BOOL;
+		F_CS_DC06C_EPB : BOOL;
+		I_CS_DC06C_EPB : BOOL;
+		I_CS_DC06C_SPB : BOOL;
+		F_CS_DC06D_EPB : BOOL;
+		I_CS_DC06D_EPB : BOOL;
+		I_CS_DC06D_SPB : BOOL;
+		F_CS_DC06E_EPB : BOOL;
+		I_CS_DC06E_EPB : BOOL;
+		I_CS_DC06E_SPB : BOOL;
+		F_CS_DC06F_EPB : BOOL;
+		I_CS_DC06F_EPB : BOOL;
+		I_CS_DC06F_SPB : BOOL;
+		F_CS_DC06G_EPB : BOOL;
+		I_CS_DC06G_EPB : BOOL;
+		I_CS_DC06G_SPB : BOOL;
+	END_TAG
+
+PROGRAM MainProgram (MAIN := "MainRoutine",
+    	                     MODE := 0,
+    	                     DisableFlag := 0,
+    	                     UseAsFolder := 0)
+    		TAG
+    		END_TAG
+
+    	ROUTINE PE_Jam_Faults
+        RC: "$N" "DC06-01 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_01_PE_HEAD_END) [XIC(DC06_01_VFD:I.Data[0].4), XIC(E3D_READ[0].0)] [TON(PE_JAM_TMR[0], 2000, 0), XIC(PE_JAM_TMR[0].DN) OTL(F_DC06_01_PE_JAM)], XIC(I_DC06_01_PE_HEAD_END) XIC(F_DC06_01_PE_JAM) XIC(F_CS_DC06_01_EPB) XIO(I_CS_DC06_01_EPB) XIC(I_CS_DC06_01_SPB) OTU(F_DC06_01_PE_JAM)];
+        RC: "$N" "DC06-02 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_02_PE_HEAD_END) [XIC(DC06_02_VFD:I.Data[0].4), XIC(E3D_READ[0].1)] [TON(PE_JAM_TMR[1], 2000, 0), XIC(PE_JAM_TMR[1].DN) OTL(F_DC06_02_PE_JAM)], XIC(I_DC06_02_PE_HEAD_END) XIC(F_DC06_02_PE_JAM) XIC(F_CS_DC06_02_EPB) XIO(I_CS_DC06_02_EPB) XIC(I_CS_DC06_02_SPB) OTU(F_DC06_02_PE_JAM)];
+        RC: "$N" "DC06-03 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_03_PE_HEAD_END) [XIC(DC06_03_VFD:I.Data[0].4), XIC(E3D_READ[0].2)] [TON(PE_JAM_TMR[2], 2000, 0), XIC(PE_JAM_TMR[2].DN) OTL(F_DC06_03_PE_JAM)], XIC(I_DC06_03_PE_HEAD_END) XIC(F_DC06_03_PE_JAM) XIC(F_CS_DC06_03_EPB) XIO(I_CS_DC06_03_EPB) XIC(I_CS_DC06_03_SPB) OTU(F_DC06_03_PE_JAM)];
+        RC: "$N" "DC06-04 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_04_PE_HEAD_END) [XIC(DC06_04_VFD:I.Data[0].4), XIC(E3D_READ[0].3)] [TON(PE_JAM_TMR[3], 2000, 0), XIC(PE_JAM_TMR[3].DN) OTL(F_DC06_04_PE_JAM)], XIC(I_DC06_04_PE_HEAD_END) XIC(F_DC06_04_PE_JAM) XIC(F_CS_DC06_04_EPB) XIO(I_CS_DC06_04_EPB) XIC(I_CS_DC06_04_SPB) OTU(F_DC06_04_PE_JAM)];
+        RC: "$N" "DC06-05 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_05_PE_HEAD_END) [XIC(DC06_05_VFD:I.Data[0].4), XIC(E3D_READ[0].4)] [TON(PE_JAM_TMR[4], 2000, 0), XIC(PE_JAM_TMR[4].DN) OTL(F_DC06_05_PE_JAM)], XIC(I_DC06_05_PE_HEAD_END) XIC(F_DC06_05_PE_JAM) XIC(F_CS_DC06_05_EPB) XIO(I_CS_DC06_05_EPB) XIC(I_CS_DC06_05_SPB) OTU(F_DC06_05_PE_JAM)];
+        RC: "$N" "DC06-06 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_06_PE_HEAD_END) [XIC(DC06_06_VFD:I.Data[0].4), XIC(E3D_READ[0].5)] [TON(PE_JAM_TMR[5], 2000, 0), XIC(PE_JAM_TMR[5].DN) OTL(F_DC06_06_PE_JAM)], XIC(I_DC06_06_PE_HEAD_END) XIC(F_DC06_06_PE_JAM) XIC(F_CS_DC06_06_EPB) XIO(I_CS_DC06_06_EPB) XIC(I_CS_DC06_06_SPB) OTU(F_DC06_06_PE_JAM)];
+        RC: "$N" "DC06-07 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_07_PE_HEAD_END) [XIC(DC06_07_VFD:I.Data[0].4), XIC(E3D_READ[0].6)] [TON(PE_JAM_TMR[6], 2000, 0), XIC(PE_JAM_TMR[6].DN) OTL(F_DC06_07_PE_JAM)], XIC(I_DC06_07_PE_HEAD_END) XIC(F_DC06_07_PE_JAM) XIC(F_CS_DC06_07_EPB) XIO(I_CS_DC06_07_EPB) XIC(I_CS_DC06_07_SPB) OTU(F_DC06_07_PE_JAM)];
+        RC: "$N" "DC06-08 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_08_PE_HEAD_END) [XIC(DC06_08_VFD:I.Data[0].4), XIC(E3D_READ[0].7)] [TON(PE_JAM_TMR[7], 2000, 0), XIC(PE_JAM_TMR[7].DN) OTL(F_DC06_08_PE_JAM)], XIC(I_DC06_08_PE_HEAD_END) XIC(F_DC06_08_PE_JAM) XIC(F_CS_DC06_08_EPB) XIO(I_CS_DC06_08_EPB) XIC(I_CS_DC06_08_SPB) OTU(F_DC06_08_PE_JAM)];
+        RC: "$N" "DC06-09 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_09_PE_HEAD_END) [XIC(DC06_09_VFD:I.Data[0].4), XIC(E3D_READ[0].8)] [TON(PE_JAM_TMR[8], 2000, 0), XIC(PE_JAM_TMR[8].DN) OTL(F_DC06_09_PE_JAM)], XIC(I_DC06_09_PE_HEAD_END) XIC(F_DC06_09_PE_JAM) XIC(F_CS_DC06_09_EPB) XIO(I_CS_DC06_09_EPB) XIC(I_CS_DC06_09_SPB) OTU(F_DC06_09_PE_JAM)];
+        RC: "$N" "DC06-10 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_10_PE_HEAD_END) [XIC(DC06_10_VFD:I.Data[0].4), XIC(E3D_READ[0].9)] [TON(PE_JAM_TMR[9], 2000, 0), XIC(PE_JAM_TMR[9].DN) OTL(F_DC06_10_PE_JAM)], XIC(I_DC06_10_PE_HEAD_END) XIC(F_DC06_10_PE_JAM) XIC(F_CS_DC06_10_EPB) XIO(I_CS_DC06_10_EPB) XIC(I_CS_DC06_10_SPB) OTU(F_DC06_10_PE_JAM)];
+        RC: "$N" "DC06-11 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_11_PE_HEAD_END) [XIC(DC06_11_VFD:I.Data[0].4), XIC(E3D_READ[0].10)] [TON(PE_JAM_TMR[10], 2000, 0), XIC(PE_JAM_TMR[10].DN) OTL(F_DC06_11_PE_JAM)], XIC(I_DC06_11_PE_HEAD_END) XIC(F_DC06_11_PE_JAM) XIC(F_CS_DC06_11_EPB) XIO(I_CS_DC06_11_EPB) XIC(I_CS_DC06_11_SPB) OTU(F_DC06_11_PE_JAM)];
+        RC: "$N" "DC06-12 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_12_PE_HEAD_END) [XIC(DC06_12_VFD:I.Data[0].4), XIC(E3D_READ[0].11)] [TON(PE_JAM_TMR[11], 2000, 0), XIC(PE_JAM_TMR[11].DN) OTL(F_DC06_12_PE_JAM)], XIC(I_DC06_12_PE_HEAD_END) XIC(F_DC06_12_PE_JAM) XIC(F_CS_DC06_12_EPB) XIO(I_CS_DC06_12_EPB) XIC(I_CS_DC06_12_SPB) OTU(F_DC06_12_PE_JAM)];
+        RC: "$N" "DC06-13 PE JAM FAULT $N" "$N" "";
+        N: [XIO(I_DC06_13_PE_HEAD_END) [XIC(DC06_13_VFD:I.Data[0].4), XIC(E3D_READ[0].12)] [TON(PE_JAM_TMR[12], 2000, 0), XIC(PE_JAM_TMR[12].DN) OTL(F_DC06_13_PE_JAM)], XIC(I_DC06_13_PE_HEAD_END) XIC(F_DC06_13_PE_JAM) XIC(F_CS_DC06_13_EPB) XIO(I_CS_DC06_13_EPB) XIC(I_CS_DC06_13_SPB) OTU(F_DC06_13_PE_JAM)];
+	END_ROUTINE
+	ROUTINE Motor_Faults
+                RC: "$N" "DC06-01 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_01_VFD:O.Data[0].7) XIO(DC06_01_VFD:I.Data[0].4) TON(DC06_01_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_01_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_01_VFD_COMM_FLT) XIC(DC06_01_VFD:I.Data[0].8) ONS(MISC_REGS[30].0) OTL(F_DC06_01_VFD_FLT);
+                RC: "$N" "DC06-02 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_02_VFD:O.Data[0].7) XIO(DC06_02_VFD:I.Data[0].4) TON(DC06_02_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_02_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_02_VFD_COMM_FLT) XIC(DC06_02_VFD:I.Data[0].8) ONS(MISC_REGS[31].0) OTL(F_DC06_02_VFD_FLT);
+                RC: "$N" "DC06-03 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_03_VFD:O.Data[0].7) XIO(DC06_03_VFD:I.Data[0].4) TON(DC06_03_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_03_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_03_VFD_COMM_FLT) XIC(DC06_03_VFD:I.Data[0].8) ONS(MISC_REGS[32].0) OTL(F_DC06_03_VFD_FLT);
+                RC: "$N" "DC06-04 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_04_VFD:O.Data[0].7) XIO(DC06_04_VFD:I.Data[0].4) TON(DC06_04_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_04_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_04_VFD_COMM_FLT) XIC(DC06_04_VFD:I.Data[0].8) ONS(MISC_REGS[33].0) OTL(F_DC06_04_VFD_FLT);
+                RC: "$N" "DC06-05 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_05_VFD:O.Data[0].7) XIO(DC06_05_VFD:I.Data[0].4) TON(DC06_05_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_05_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_05_VFD_COMM_FLT) XIC(DC06_05_VFD:I.Data[0].8) ONS(MISC_REGS[34].0) OTL(F_DC06_05_VFD_FLT);
+                RC: "$N" "DC06-06 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_06_VFD:O.Data[0].7) XIO(DC06_06_VFD:I.Data[0].4) TON(DC06_06_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_06_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_06_VFD_COMM_FLT) XIC(DC06_06_VFD:I.Data[0].8) ONS(MISC_REGS[35].0) OTL(F_DC06_06_VFD_FLT);
+                RC: "$N" "DC06-07 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_07_VFD:O.Data[0].7) XIO(DC06_07_VFD:I.Data[0].4) TON(DC06_07_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_07_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_07_VFD_COMM_FLT) XIC(DC06_07_VFD:I.Data[0].8) ONS(MISC_REGS[36].0) OTL(F_DC06_07_VFD_FLT);
+                RC: "$N" "DC06-08 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_08_VFD:O.Data[0].7) XIO(DC06_08_VFD:I.Data[0].4) TON(DC06_08_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_08_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_08_VFD_COMM_FLT) XIC(DC06_08_VFD:I.Data[0].8) ONS(MISC_REGS[37].0) OTL(F_DC06_08_VFD_FLT);
+                RC: "$N" "DC06-09 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_09_VFD:O.Data[0].7) XIO(DC06_09_VFD:I.Data[0].4) TON(DC06_09_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_09_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_09_VFD_COMM_FLT) XIC(DC06_09_VFD:I.Data[0].8) ONS(MISC_REGS[38].0) OTL(F_DC06_09_VFD_FLT);
+                RC: "$N" "DC06-10 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_10_VFD:O.Data[0].7) XIO(DC06_10_VFD:I.Data[0].4) TON(DC06_10_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_10_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_10_VFD_COMM_FLT) XIC(DC06_10_VFD:I.Data[0].8) ONS(MISC_REGS[39].0) OTL(F_DC06_10_VFD_FLT);
+                RC: "$N" "DC06-11 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_11_VFD:O.Data[0].7) XIO(DC06_11_VFD:I.Data[0].4) TON(DC06_11_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_11_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_11_VFD_COMM_FLT) XIC(DC06_11_VFD:I.Data[0].8) ONS(MISC_REGS[40].0) OTL(F_DC06_11_VFD_FLT);
+                RC: "$N" "DC06-12 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_12_VFD:O.Data[0].7) XIO(DC06_12_VFD:I.Data[0].4) TON(DC06_12_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_12_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_12_VFD_COMM_FLT) XIC(DC06_12_VFD:I.Data[0].8) ONS(MISC_REGS[41].0) OTL(F_DC06_12_VFD_FLT);
+                RC: "$N" "DC06-13 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_13_VFD:O.Data[0].7) XIO(DC06_13_VFD:I.Data[0].4) TON(DC06_13_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC01_EZONE1_ESCR) XIC(DC06_13_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_13_VFD_COMM_FLT) XIC(DC06_13_VFD:I.Data[0].8) ONS(MISC_REGS[42].0) OTL(F_DC06_13_VFD_FLT);
+                RC: "$N" "DC06-1 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_M1_VFD:O.Data[0].7) XIO(DC06_M1_VFD:I.Data[0].4) TON(DC06_M1_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC06_EZONE3_ESCR) XIC(DC06_M1_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_M1_VFD_COMM_FLT) XIC(DC06_M1_VFD:I.Data[0].8) ONS(MISC_REGS[43].0) OTL(F_DC06_M1_VFD_FLT);
+                RC: "$N" "DC06-2 MOTOR FAULT $N" "$N" "";
+                N: XIC(DC06_M2_VFD:O.Data[0].7) XIO(DC06_M2_VFD:I.Data[0].4) TON(DC06_M2_VFD_FAULTED_FAULT_TMR, 2000, 0);
+                N: XIC(I_MCP_DC06_EZONE3_ESCR) XIC(DC06_M2_VFD_FAULTED_FAULT_TMR.DN) XIO(F_DC06_M2_VFD_COMM_FLT) XIC(DC06_M2_VFD:I.Data[0].8) ONS(MISC_REGS[44].0) OTL(F_DC06_M2_VFD_FLT);
+	END_ROUTINE
+	ROUTINE Disc_Faults
+        RC: "$N" "DISC FAULT CONV 01$N" "$N" "";
+        N: XIO(I_DC06_01_MSD) OTE(F_DC06_01_MSD);
+        RC: "$N" "DISC FAULT CONV 02$N" "$N" "";
+        N: XIO(I_DC06_02_MSD) OTE(F_DC06_02_MSD);
+        RC: "$N" "DISC FAULT CONV 03$N" "$N" "";
+        N: XIO(I_DC06_03_MSD) OTE(F_DC06_03_MSD);
+        RC: "$N" "DISC FAULT CONV 04$N" "$N" "";
+        N: XIO(I_DC06_04_MSD) OTE(F_DC06_04_MSD);
+        RC: "$N" "DISC FAULT CONV 05$N" "$N" "";
+        N: XIO(I_DC06_05_MSD) OTE(F_DC06_05_MSD);
+        RC: "$N" "DISC FAULT CONV 06$N" "$N" "";
+        N: XIO(I_DC06_06_MSD) OTE(F_DC06_06_MSD);
+        RC: "$N" "DISC FAULT CONV 07$N" "$N" "";
+        N: XIO(I_DC06_07_MSD) OTE(F_DC06_07_MSD);
+        RC: "$N" "DISC FAULT CONV 08$N" "$N" "";
+        N: XIO(I_DC06_08_MSD) OTE(F_DC06_08_MSD);
+        RC: "$N" "DISC FAULT CONV 09$N" "$N" "";
+        N: XIO(I_DC06_09_MSD) OTE(F_DC06_09_MSD);
+        RC: "$N" "DISC FAULT CONV 10$N" "$N" "";
+        N: XIO(I_DC06_10_MSD) OTE(F_DC06_10_MSD);
+        RC: "$N" "DISC FAULT CONV 11$N" "$N" "";
+        N: XIO(I_DC06_11_MSD) OTE(F_DC06_11_MSD);
+        RC: "$N" "DISC FAULT CONV 12$N" "$N" "";
+        N: XIO(I_DC06_12_MSD) OTE(F_DC06_12_MSD);
+        RC: "$N" "DISC FAULT CONV 13$N" "$N" "";
+        N: XIO(I_DC06_13_MSD) OTE(F_DC06_13_MSD);
+        RC: "$N" "DISC FAULT MU 1$N" "$N" "";
+        N: XIO(I_DC06_M1_MSD) OTE(F_DC06_M1_MSD);
+        RC: "$N" "DISC FAULT MU 2$N" "$N" "";
+        N: XIO(I_DC06_M2_MSD) OTE(F_DC06_M2_MSD);
+	END_ROUTINE
+	ROUTINE EStop_Faults
+        RC: "$N" "ESTOP CS DC06 01 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_01_EPB) OTL(F_CS_DC06_01_EPB), XIO(I_CS_DC06_01_EPB) XIC(I_CS_DC06_01_SPB) OTU(F_CS_DC06_01_EPB)];
+        RC: "$N" "ESTOP CS DC06 02 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_02_EPB) OTL(F_CS_DC06_02_EPB), XIO(I_CS_DC06_02_EPB) XIC(I_CS_DC06_02_SPB) OTU(F_CS_DC06_02_EPB)];
+        RC: "$N" "ESTOP CS DC06 03 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_03_EPB) OTL(F_CS_DC06_03_EPB), XIO(I_CS_DC06_03_EPB) XIC(I_CS_DC06_03_SPB) OTU(F_CS_DC06_03_EPB)];
+        RC: "$N" "ESTOP CS DC06 04 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_04_EPB) OTL(F_CS_DC06_04_EPB), XIO(I_CS_DC06_04_EPB) XIC(I_CS_DC06_04_SPB) OTU(F_CS_DC06_04_EPB)];
+        RC: "$N" "ESTOP CS DC06 05 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_05_EPB) OTL(F_CS_DC06_05_EPB), XIO(I_CS_DC06_05_EPB) XIC(I_CS_DC06_05_SPB) OTU(F_CS_DC06_05_EPB)];
+        RC: "$N" "ESTOP CS DC06 06 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_06_EPB) OTL(F_CS_DC06_06_EPB), XIO(I_CS_DC06_06_EPB) XIC(I_CS_DC06_06_SPB) OTU(F_CS_DC06_06_EPB)];
+        RC: "$N" "ESTOP CS DC06 07 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_07_EPB) OTL(F_CS_DC06_07_EPB), XIO(I_CS_DC06_07_EPB) XIC(I_CS_DC06_07_SPB) OTU(F_CS_DC06_07_EPB)];
+        RC: "$N" "ESTOP CS DC06 08 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_08_EPB) OTL(F_CS_DC06_08_EPB), XIO(I_CS_DC06_08_EPB) XIC(I_CS_DC06_08_SPB) OTU(F_CS_DC06_08_EPB)];
+        RC: "$N" "ESTOP CS DC06 09 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_09_EPB) OTL(F_CS_DC06_09_EPB), XIO(I_CS_DC06_09_EPB) XIC(I_CS_DC06_09_SPB) OTU(F_CS_DC06_09_EPB)];
+        RC: "$N" "ESTOP CS DC06 10 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_10_EPB) OTL(F_CS_DC06_10_EPB), XIO(I_CS_DC06_10_EPB) XIC(I_CS_DC06_10_SPB) OTU(F_CS_DC06_10_EPB)];
+        RC: "$N" "ESTOP CS DC06 11 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_11_EPB) OTL(F_CS_DC06_11_EPB), XIO(I_CS_DC06_11_EPB) XIC(I_CS_DC06_11_SPB) OTU(F_CS_DC06_11_EPB)];
+        RC: "$N" "ESTOP CS DC06 12 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_12_EPB) OTL(F_CS_DC06_12_EPB), XIO(I_CS_DC06_12_EPB) XIC(I_CS_DC06_12_SPB) OTU(F_CS_DC06_12_EPB)];
+        RC: "$N" "ESTOP CS DC06 13 FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06_13_EPB) OTL(F_CS_DC06_13_EPB), XIO(I_CS_DC06_13_EPB) XIC(I_CS_DC06_13_SPB) OTU(F_CS_DC06_13_EPB)];
+        RC: "$N" "ESTOP DC06A FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06A_EPB) OTL(F_CS_DC06A_EPB), XIO(I_CS_DC06A_EPB) XIC(I_CS_DC06A_KSW) OTU(F_CS_DC06A_EPB)];
+        RC: "$N" "ESTOP DC06B FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06B_EPB) OTL(F_CS_DC06B_EPB), XIO(I_CS_DC06B_EPB) XIC(I_CS_DC06B_KSW) OTU(F_CS_DC06B_EPB)];
+        RC: "$N" "ESTOP DC06C FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06C_EPB) OTL(F_CS_DC06C_EPB), XIO(I_CS_DC06C_EPB) XIC(I_CS_DC06C_KSW) OTU(F_CS_DC06C_EPB)];
+        RC: "$N" "ESTOP DC06D FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06D_EPB) OTL(F_CS_DC06D_EPB), XIO(I_CS_DC06D_EPB) XIC(I_CS_DC06D_KSW) OTU(F_CS_DC06D_EPB)];
+        RC: "$N" "ESTOP DC06E FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06E_EPB) OTL(F_CS_DC06E_EPB), XIO(I_CS_DC06E_EPB) XIC(I_CS_DC06E_KSW) OTU(F_CS_DC06E_EPB)];
+        RC: "$N" "ESTOP DC06F FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06F_EPB) OTL(F_CS_DC06F_EPB), XIO(I_CS_DC06F_EPB) XIC(I_CS_DC06F_KSW) OTU(F_CS_DC06F_EPB)];
+        RC: "$N" "ESTOP DC06G FAULT $N" "$N" "";
+        N: [XIC(I_CS_DC06G_EPB) OTL(F_CS_DC06G_EPB), XIO(I_CS_DC06G_EPB) XIC(I_CS_DC06G_KSW) OTU(F_CS_DC06G_EPB)];
+	END_ROUTINE
+	ROUTINE MainRoutine
+		RC: "$N" "MAIN ROUTINE - CALL GENERATED ROUTINES$N" "$N" "";
+		N: NOP();
+		N: JSR(PE_Jam_Faults,0);
+		N: JSR(Motor_Faults,0);
+		N: JSR(Disc_Faults,0);
+		N: JSR(EStop_Faults,0);
+	END_ROUTINE
+
+    	END_PROGRAM
+
+        TASK MainTask (Type := CONTINUOUS,
+                    Rate := 10,
+                    Priority := 10,
+                    Watchdog := 500,
+                    DisableUpdateOutputs := No,
+                    InhibitTask := No)
+            MainProgram;
+        END_TASK
+
+        CONFIG CST(SystemTimeMasterID := 0) END_CONFIG
+        CONFIG EthernetPort1(Label := "1", PortEnabled := 1) END_CONFIG
+        CONFIG TimeSynchronize(Priority1 := 128, Priority2 := 128, PTPEnable := 0) END_CONFIG
+        CONFIG WallClockTime(LocalTimeAdjustment := 0, TimeZone := 0) END_CONFIG
+        END_CONTROLLER
+        
