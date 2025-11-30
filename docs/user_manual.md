@@ -1,3 +1,9 @@
+---
+marp: true
+size: 4:3
+paginate: true
+---
+
 # PLC Code Generator - User Manual
 
 ## Overview
@@ -26,6 +32,8 @@ The **PLC Code Generator** is a desktop application that generates RSLogix/Studi
     source venv/Scripts/activate  # Windows
     ```
 
+---
+
 4. Install required dependencies (if any):
 
     ```bash
@@ -48,6 +56,9 @@ The **PLC Code Generator** is a desktop application that generates RSLogix/Studi
 - **Conveyor Name**: Identifier for the conveyor line (e.g., `LineA`).
 - **Number of Conveyors**: Total number of conveyors in the line.
 - **Makeup Unit**: Checkbox to indicate if the line has a makeup unit.
+
+---
+
 - **Filepath**: Path where the generated `.L5K` file will be saved.
 - **Browse...**: Opens a file dialog to choose the save location.
 - **Generate Code**: Button to generate the PLC code.
@@ -74,6 +85,8 @@ The **PLC Code Generator** is a desktop application that generates RSLogix/Studi
     - Number of Conveyors
     - Select Makeup Unit if applicable
     - Filepath to save the `.L5K` file
+
+---
 
 3. Click **Generate Code**.
 4. Check the **status bar** for success confirmation.
