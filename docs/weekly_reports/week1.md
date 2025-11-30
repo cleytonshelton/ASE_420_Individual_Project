@@ -35,6 +35,7 @@ paginate: true
 - Take user input for certain fields
 - Print each fault type into a text file
 - Add all 5 fault types
+- Set up a nice window for a UI
 
 ---
 
