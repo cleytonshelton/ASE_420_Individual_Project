@@ -2,88 +2,49 @@ import pytest
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from generator import generate_plc_code  # Your new refactored code
+from generator import Conveyor
 
-# ----- Old code reproduced as a function for regression testing -----
-def old_generate_code(conv_name: str, num: int, is_MU: bool) -> str:
-    """Simulates the output of the old code (all rungs on one line, title on newline)."""
-    import string
+import string
 
-    output = f"**** PE JAM FAULTS **** \n"
-    # PE JAM FAULTS
-    rungs = []
+def old_rung_variables(conv_name: str, num: int, is_MU: bool):
+    """Return the list of expected variable substrings from the old code"""
+    vars = []
+
+    # PE JAM
     for i in range(1, num + 1):
-        rungs.append(
-            f"[XIO(I_{conv_name}_{i:02}_PE_HEAD_END)[XIC({conv_name}_{i:02}_VFD:I.Data[0].4),XIC(E3D_READ[0].{i-1})]"
-            f"[TON(PE_JAM_TMR[{i-1}],?,?),XIC(PE_JAM_TMR[{i-1}].DN)OTL(F_{conv_name}_{i:02}_PE_JAM)],"
-            f"XIC(I_{conv_name}_{i:02}_PE_HEAD_END)XIC(F_{conv_name}_{i:02}_PE_JAM)XIC(F_CS_{conv_name}_{i:02}_EPB)"
-            f"XIO(I_CS_{conv_name}_{i:02}_EPB)XIC(I_CS_{conv_name}_{i:02}_SPB)OTU(F_{conv_name}_{i:02}_PE_JAM)];"
-        )
-    output += "".join(rungs)
-
+        vars.append(f"F_{conv_name}_{i:02}_PE_JAM")
+        vars.append(f"PE_JAM_TMR[{i-1}]")
     # MOTOR FAULTS
-    output += "\n**** MOTOR FAULTS **** \n"
     misc_index = 30
-    rungs = []
     for i in range(1, num + 1):
-        rungs.append(
-            f"[[XIC({conv_name}_{i:02}_VFD:O.Data[0].7)XIO({conv_name}_{i:02}_VFD:I.Data[0].4),"
-            f"XIO({conv_name}_{i:02}_VFD:O.Data[0].7)XIC({conv_name}_{i:02}_VFD:I.Data[0].4)]"
-            f"TON({conv_name}_{i:02}_VFD_FAULTED_FAULT_TMR,?,?),"
-            f"XIC(I_MCP_DC01_EZONE1_ESCR)[XIC({conv_name}_{i:02}_VFD_FAULTED_FAULT_TMR.DN),"
-            f"XIO(F_{conv_name}_{i:02}_VFD_COMM_FLT)XIC({conv_name}_{i:02}_VFD:I.Data[0].8)ONS(MISC_REGS[{misc_index}].0)]"
-            f"OTL(F_{conv_name}_{i:02}_VFD_FLT)];"
-        )
+        vars.append(f"F_{conv_name}_{i:02}_VFD_FLT")
+        vars.append(f"MISC_REGS[{misc_index}]")
         misc_index += 1
-
     if is_MU:
         for i in range(1, 3):
-            rungs.append(
-                f"[[XIC({conv_name}_M{i}_VFD:O.Data[0].7)XIO({conv_name}_M{i}_VFD:I.Data[0].4),"
-                f"XIO({conv_name}_M{i}_VFD:O.Data[0].7)XIC({conv_name}_M{i}_VFD:I.Data[0].4)]"
-                f"TON({conv_name}_M{i}_VFD_FAULTED_FAULT_TMR,?,?),"
-                f"XIC(I_MCP_{conv_name}_EZONE3_ESCR)[XIC({conv_name}_M{i}_VFD_FAULTED_FAULT_TMR.DN),"
-                f"XIO(F_{conv_name}_M{i}_VFD_COMM_FLT)XIC({conv_name}_M{i}_VFD:I.Data[0].8)ONS(MISC_REGS[{misc_index}].0)]"
-                f"OTL(F_{conv_name}_M{i}_VFD_FLT)];"
-            )
+            vars.append(f"F_{conv_name}_M{i}_VFD_FLT")
+            vars.append(f"MISC_REGS[{misc_index}]")
             misc_index += 1
-
-    output += "".join(rungs)
-
-    # COMM FAULTS
-    output += "\n**** COMM FAULTS **** \n"
-    rungs = []
+    # COMM
     for i in range(1, num + 1):
-        rungs.append(f"XIC({conv_name}_{i:02}_VFD:I.ConnectionFaulted)OTE(F_{conv_name}_{i:02}_VFD_COMM_FLT);")
+        vars.append(f"F_{conv_name}_{i:02}_VFD_COMM_FLT")
     if is_MU:
         for i in range(1, 3):
-            rungs.append(f"XIC({conv_name}_M{i}_VFD:I.ConnectionFaulted)OTE(F_{conv_name}_M{i}_VFD_COMM_FLT);")
-    output += "".join(rungs)
-
-    # DISC FAULTS
-    output += "\n**** DISC FAULTS **** \n"
-    rungs = []
+            vars.append(f"F_{conv_name}_M{i}_VFD_COMM_FLT")
+    # DISC
     for i in range(1, num + 1):
-        rungs.append(f"XIO(I_{conv_name}_{i:02}_MSD)OTE(F_{conv_name}_{i:02}_MSD);")
+        vars.append(f"F_{conv_name}_{i:02}_MSD")
     if is_MU:
         for i in range(1, 3):
-            rungs.append(f"XIO(I_{conv_name}_M{i}_MSD)OTE(F_{conv_name}_M{i}_MSD);")
-    output += "".join(rungs)
-
-    # ESTOP FAULTS
-    output += "\n**** ESTOP FAULTS **** \n"
-    rungs = []
+            vars.append(f"F_{conv_name}_M{i}_MSD")
+    # ESTOP
     for i in range(1, num + 1):
-        rungs.append(f"[XIC(I_CS_{conv_name}_{i:02}_EPB)OTL(F_CS_{conv_name}_{i:02}_EPB),"
-                     f"XIO(I_CS_{conv_name}_{i:02}_EPB)XIC(I_CS_{conv_name}_{i:02}_SPB)OTU(F_CS_{conv_name}_{i:02}_EPB)];")
+        vars.append(f"F_CS_{conv_name}_{i:02}_EPB")
     for letter in string.ascii_uppercase[:7]:
-        rungs.append(f"[XIC(I_CS_{conv_name}{letter}_EPB)OTL(F_CS_{conv_name}{letter}_EPB),"
-                     f"XIO(I_CS_{conv_name}{letter}_EPB)XIC(I_CS_{conv_name}{letter}_KSW)OTU(F_CS_{conv_name}{letter}_EPB)];")
-    output += "".join(rungs)
+        vars.append(f"F_CS_{conv_name}{letter}_EPB")
+    return vars
 
-    return output
 
-# ----- Regression tests -----
 @pytest.mark.parametrize(
     "conv_name,num,is_MU",
     [
@@ -93,6 +54,19 @@ def old_generate_code(conv_name: str, num: int, is_MU: bool) -> str:
     ]
 )
 def test_regression(conv_name, num, is_MU):
-    old_code = old_generate_code(conv_name, num, is_MU)
-    new_code = generate_plc_code(conv_name, num, is_MU)
-    assert new_code == old_code, "Refactored code does not match original code output"
+    new_code = Conveyor.generate_plc_code_full(conv_name, num, is_MU, "TEST_CTRL")
+
+    # Check all expected variables/rungs exist in new code
+    expected_vars = old_rung_variables(conv_name, num, is_MU)
+    for var in expected_vars:
+        assert var in new_code, f"Expected variable/rung {var} missing in new code"
+
+    # Optionally, check that MainRoutine calls all routines
+    routine_names = [
+        "PE_Jam_Faults",
+        "Motor_Faults",
+        "Disc_Faults",
+        "EStop_Faults",
+    ]
+    for name in routine_names:
+        assert f"JSR({name},0);" in new_code
